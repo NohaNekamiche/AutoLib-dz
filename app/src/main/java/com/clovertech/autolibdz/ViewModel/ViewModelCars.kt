@@ -3,19 +3,19 @@ package com.clovertech.autolibdz.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.clovertech.autolibdz.APIs.Couroutines
-import com.clovertech.autolibdz.DataClasses.Rental
-import com.clovertech.autolibdz.DataClasses.Vehicle
+import com.clovertech.autolibdz.DataClasses.Location
+import com.clovertech.autolibdz.api.Couroutines
+import com.clovertech.autolibdz.model.Rental
+import com.clovertech.autolibdz.model.Vehicle
 import com.clovertech.autolibdz.repository.CarsRepository
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import retrofit2.Response
 
 
 class ViewModelCars (private val repository: CarsRepository): ViewModel() {
     private lateinit var job:Job
     private val myResponse= MutableLiveData<List<Vehicle>>()
+    private val locationRep= MutableLiveData<Response<Location>>()
 
 
     val carsByStat:LiveData<List<Vehicle>>
@@ -26,13 +26,21 @@ class ViewModelCars (private val repository: CarsRepository): ViewModel() {
              {repository.getCarsByStat(Status,idborn)},{
                 myResponse.value=it
              })
-        /*val carsByStat=repository.getCarsByStat(Status)
+        /*val carsByStat=com.clovertech.autolibdz.repository.getCarsByStat(Status)
         this.myResponse.value=carsByStat*/
     }
-    suspend fun addRental(rental: Rental):Rental{
+    suspend fun addRental(rental: Rental): Rental {
         val response=repository.addRental(rental)
        return response
     }
+
+ /*   suspend fun validateLocation(id:Int){
+        job=Couroutines.ioThenMain(
+            {com.clovertech.autolibdz.repository.validateLocation(id)},{it->
+                locationRep.value=it
+            }
+        )
+    }*/
 
     override fun onCleared() {
         super.onCleared()

@@ -1,5 +1,6 @@
 package com.clovertech.autolibdz.ui.card
 
+import ViewModel.ViewModelCard
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.clovertech.autolibdz.APIs.CardsApi
+import com.clovertech.autolibdz.api.CardsApi
 import com.clovertech.autolibdz.R
 import com.clovertech.autolibdz.ViewModel.ViewModelCards
 import com.clovertech.autolibdz.ViewModel.ViewModelCardsFactory
@@ -45,6 +46,7 @@ class CardFragment : Fragment() {
 
         val amount=arguments?.getInt("amount").toString()
         val id=arguments?.getInt("idrental").toString()
+        val idcar=arguments?.getInt("idcar")
         val add_card_fragment = AddCardFragment()
         Toast.makeText(context,"amount to pay $amount", Toast.LENGTH_LONG).show()
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
@@ -60,7 +62,7 @@ class CardFragment : Fragment() {
     }
 
     private fun loadCard(fragmentManager: FragmentManager,amount:String,id:String) {
-        val cardApi=CardsApi()
+        val cardApi= CardsApi()
         val repository=CardsRepository(cardApi)
         cardFactory=ViewModelCardsFactory(repository)
         viewModel=ViewModelProvider(this,cardFactory).get(ViewModelCards::class.java)
